@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html class="no-js" lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SHAREZY — Web Version 1</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- โหลด Jost + Noto Sans Thai (น้ำหนักที่ใช้จริง) -->
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;600;700;900&family=Noto+Sans+Thai:wght@400;600;800;900&display=swap" rel="stylesheet">
+
+  <!-- CSS หลัก (พาธแบบ relative ดีแล้ว) -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="hdr-left"></div>
+
+    <a href="#" class="hdr-logo" aria-label="Sharezy">
+      <img src="assets/logo.png" alt="Sharezy logo">
+    </a>
+
+    <div class="hdr-right" id="hdrRight"></div>
+    <div id="accountMenu" class="dropdown hidden"></div>
+
+    <!-- Cart -->
+    <aside id="cartPanel" class="cart-panel hidden" aria-label="ตะกร้าสินค้า">
+      <div class="cart-head">
+        <div class="h3">ตะกร้าของคุณ</div>
+        <button class="icon-btn" id="closeCart" aria-label="ปิดตะกร้า">×</button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-foot">
+        <div class="subtotal">
+          <span>จำนวนเงินทั้งหมด : </span>
+          <strong id="cartSubtotal">0 บาท</strong>
+        </div>
+        <button class="btn-primary w-full" id="btnCheckout">ตรวจสอบสินค้า</button>
+        <button class="btn w-full" id="btnClearCart" style="background: #6c757d; margin-top: 8px;">ล้างตะกร้า 🧹</button>
+      </div>
+    </aside>
+    <div id="cartBackdrop" class="backdrop hidden" aria-hidden="true"></div>
+
+    <!-- Notifications -->
+    <aside id="notifPanel" class="notif-panel hidden" role="dialog" aria-modal="true" aria-label="การแจ้งเตือน">
+      <div class="notif-head">
+        <span>การแจ้งเตือน</span>
+        <button class="icon-btn small" id="btnClearNotif" title="ล้างประวัติ" aria-label="ล้างประวัติ">🧹</button>
+      </div>
+      <div id="notifList" class="notif-list"></div>
+    </aside>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero" style="background-image:url('assets/main.png')">
+    <div class="hero-inner hero-left reveal">
+      <div class="eyebrow eyebrow-brand">SHAREZY</div>
+      <h1 class="display">
+        <span class="headline line-1">
+          <span class="hero-word word1">เช่า</span>
+          <span class="hero-word word1">ใช้</span>
+          <span class="hero-word word1">สวย</span>
+        </span>
+        <span class="headline line-2 hero-word word2">สบายกระเป๋า</span>
+      </h1>
+    </div>
+  </section>
+
+  <!-- ===== ปุ่มค้นหา ===== -->
+  <section class="container pad-lg">
+    <div class="search-wrap reveal">
+      <input id="searchInput" class="search-input" placeholder="ค้นหาสินค้า ชื่อ สี ไซส์..." />
+      <button id="searchBtn" class="btn-primary">ค้นหา</button>
+    </div>
+  </section>
+
+  <!-- === ปุ่มเลือกวันที่ === -->
+<section id="dateFilterBar" class="container pad-md">
+  <div class="date-filter">
+    <label class="df-field">
+      <span>วันที่เริ่มต้น</span>
+      <input type="date" id="startDate">
+    </label>
+    <span class="df-sep">—</span>
+    <label class="df-field">
+      <span>วันที่สิ้นสุด</span>
+      <input type="date" id="endDate">
+    </label>
+  </div>
+</section>
+
+  <!-- ===== Categories ===== -->
+  <section id="browse" class="container pad-md">
+    <div class="section-head">
+      <h2>หมวดหมู่</h2>
+    </div>
+    <div class="cat-row">
+      <button class="cat-ctrl" id="catPrev" aria-label="ก่อนหน้า">‹</button>
+      <div class="cat-viewport">
+        <div class="cat-track" id="catTrack"></div>
+      </div>
+      <button class="cat-ctrl" id="catNext" aria-label="ถัดไป">›</button>
+    </div>
+  </section>
+
+  <!-- ===== Product Grid ===== -->
+  <section class="container pad-md">
+    <div class="container pad-md">
+      <h2 id="productTitle">สินค้า</h2>
+    </div>
+    <div id="productGrid" class="prod-grid"></div>
+    <div id="emptyState" class="empty hidden"></div>
+    <!-- pager จะถูก main.js สร้างเป็น #pagerSlot หลัง productGrid -->
+  </section>
+
+  <!-- ===== Recommendation (optional placeholder) ===== -->
+  <section class="container pad-md">
+    <div class="section-head">
+      <h2>แนะนำสำหรับคุณ</h2>
+    </div>
+    <div id="recGrid" class="rec-grid"></div>
+  </section>
+
+  <!-- ===== Newsletter (optional) ===== -->
+  <section class="newsletter">
+    <div class="newsletter-inner reveal">
+      <h3>Sign up for our newsletter</h3>
+      <p class="muted">อัปเดตโปรโมชัน คอลเลคชันใหม่ และสิทธิพิเศษก่อนใคร</p>
+      <form id="newsletterForm" class="newsletter-form">
+        <input type="email" required placeholder="อีเมลของคุณ">
+        <button class="btn-primary">Subscribe</button>
+      </form>
+      <div id="newsletterMsg" class="tiny muted"></div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-logo"><img src="assets/logo.png" alt="Sharezy"/></div>
+          <p class="muted">แพลตฟอร์มให้เช่าแฟชั่นและของใช้สำหรับทุกโอกาส</p>
+          <p class="muted">📍 999, Bangkok Thailand 10000<br>
+          ✉️ <a href="mailto:arm@sharezy.com">arm@sharezy.com</a></p>
+        </div>
+        <div>
+          <h4>ช่วยเหลือ</h4>
+          <ul class="linklist">
+            <li><a href="#">วิธีเช่า</a></li>
+            <li><a href="#">การชำระเงิน</a></li>
+            <li><a href="#">การจัดส่ง/คืนสินค้า</a></li>
+            <li><a href="#">ติดต่อเรา</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>เกี่ยวกับเรา</h4>
+          <ul class="linklist">
+            <li><a href="#">เกี่ยวกับ Sharezy</a></li>
+            <li><a href="#">นโยบายความเป็นส่วนตัว</a></li>
+            <li><a href="#">ข้อกำหนดการใช้งาน</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>ติดตามเรา</h4>
+          <div class="socials">
+            <a href="#" aria-label="facebook">f</a>
+            <a href="#" aria-label="instagram">ig</a>
+            <a href="#" aria-label="twitter">tw</a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">© 2025 Sharezy. Sirichai A.</div>
+    </div>
+  </footer>
+
+  <!-- ===== Roots ===== -->
+  <div id="modal-root"></div>
+  <div id="toastWrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ===== Main Script (อย่าใส่สคริปต์ patch อื่นซ้ำ) ===== -->
+  <script src="js/user.js" defer></script>
+  <script src="js/item_clothes.js" defer></script>
+  <script src="js/item_tools.js" defer></script>
+  <script src="js/category.js" defer></script>
+  <script src="js/carriers.js" defer></script>
+  <script src="js/coupons.js" defer></script>
+
+  <script src="js/utils.js" defer></script>
+  <script src="js/promo-widget.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/notifications.js" defer></script>
+  <script src="js/product-catalog.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <script src="js/payment.js" defer></script>
+  <script src="js/order-management.js" defer></script>
+  <script src="js/my-info.js" defer></script>
+  <script src="js/signature.js" defer></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+  <script src="js/main.js" defer></script>
+</body>
+</html>
