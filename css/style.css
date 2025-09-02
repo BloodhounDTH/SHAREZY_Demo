@@ -1366,18 +1366,9 @@ small.rank-name {
 /* Admin (อลังการที่สุด สีม่วง/รุ้ง) */
 .rank-admin.account-rank-icon-large,
 .rank-admin.rank-name {
-  color: #ff00ff; /* สีม่วงเด่น */
-  animation: adminShine 1.5s infinite linear;
-  background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0000, #00ff00, #ffff00, #ff00ff);
-  background-clip: text;                 /* standard property for compatibility */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
-  animation-delay: 0s, 0.5s; /* หน่วงเวลา animation เล็กน้อย */
-}
-@keyframes adminShine {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  color: #ff0000; /* สีแดง */
+  filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+
 }
 
 /*
