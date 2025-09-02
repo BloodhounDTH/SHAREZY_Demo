@@ -178,6 +178,78 @@
     </div>
   </footer>
 
+    <!-- Cookie Banner -->
+  <div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="การใช้คุกกี้" hidden>
+    <div class="cookie-text">
+      เว็บไซต์นี้ใช้คุกกี้เพื่อให้การใช้งานราบรื่น และเพื่อการวิเคราะห์/การตลาดตามที่คุณยินยอม
+      คุณสามารถตั้งค่าได้ที่ “การตั้งค่าคุกกี้”
+    </div>
+    <div class="cookie-actions">
+      <button id="cookieSettingsBtn" class="btn ghost" type="button">การตั้งค่าคุกกี้</button>
+      <button id="cookieRejectAllBtn" class="btn" type="button">ปฏิเสธทั้งหมด</button>
+      <button id="cookieAcceptAllBtn" class="btn primary" type="button">ยอมรับทั้งหมด</button>
+    </div>
+  </div>
+
+  <!-- Cookie Settings Modal -->
+  <div id="cookieModal" class="cookie-modal" aria-modal="true" role="dialog" hidden>
+    <div class="cookie-modal__box">
+      <h3>การตั้งค่าคุกกี้</h3>
+      <p>เลือกประเภทคุกกี้ที่อนุญาตได้ตลอดเวลา</p>
+
+      <div class="cookie-group">
+        <div class="left">
+          <strong>จำเป็นต่อการทำงาน</strong><br>
+          ใช้สำหรับล็อกอิน/ความปลอดภัย/ภาษาหน้าเว็บ (บังคับใช้ ปิดไม่ได้)
+        </div>
+        <div class="right">
+          <label class="switch">
+            <input type="checkbox" checked disabled>
+            <span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="cookie-group">
+        <div class="left">
+          <strong>วิเคราะห์การใช้งาน (Analytics)</strong><br>
+          ช่วยให้เราปรับปรุงประสบการณ์ผู้ใช้
+        </div>
+        <div class="right">
+          <label class="switch">
+            <input type="checkbox" id="toggleAnalytics">
+            <span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="cookie-group">
+        <div class="left">
+          <strong>การตลาด/โฆษณา (Marketing)</strong><br>
+          ใช้สำหรับการทำโฆษณาแบบตรงกลุ่มเป้าหมาย
+        </div>
+        <div class="right">
+          <label class="switch">
+            <input type="checkbox" id="toggleMarketing">
+            <span></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="cookie-modal__actions">
+        <button id="cookieSavePrefsBtn" class="btn primary">บันทึกการตั้งค่า</button>
+        <button id="cookieCloseModalBtn" class="btn ghost">ปิด</button>
+      </div>
+
+      <div class="cookie-links">
+        <a href="/privacy-policy" target="_blank" rel="noopener">นโยบายความเป็นส่วนตัว</a>
+        ·
+        <a href="/cookie-policy" target="_blank" rel="noopener">นโยบายคุกกี้</a>
+      </div>
+    </div>
+  </div>
+
+
   <!-- ===== Roots ===== -->
   <div id="modal-root"></div>
   <div id="toastWrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
@@ -200,6 +272,7 @@
   <script src="js/order-management.js" defer></script>
   <script src="js/my-info.js" defer></script>
   <script src="js/signature.js" defer></script>
+  <script src="js/cookie-consent.js" defer></script>
 
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
   <script src="js/main.js" defer></script>

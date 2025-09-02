@@ -90,7 +90,7 @@ function renderProducts(list, title = "สินค้า"){
     <article class="product-card reveal">
       <div class="thumb">
         <span class="status-badge ${p.__status.cls}">${p.__status.text}</span>
-        <img src="${imgPath(p.image)}" alt="${p.title}" onerror="this.src='assets/main.jpg'">
+        <img src="${imgPath(getCoverImage(p))}" alt="${p.title}" onerror="this.src='assets/main.jpg'">
         <div class="overlay"><button class="btn" onclick="openDetail(${p.id})">รายละเอียด</button></div>
       </div>
       <div class="product-info">
@@ -169,7 +169,7 @@ function renderRecommended(){
     const cardHTML = rec.map(p=>`
       <article class="product-card" onclick="openDetail(${p.id})">
         <div class="thumb">
-          <img src="${imgPath(p.image)}" alt="${p.title}" onerror="this.src='assets/main.jpg'">
+          <img src="${imgPath(getCoverImage(p))}" alt="${p.title}" onerror="this.src='assets/main.jpg'">
           <div class="overlay"><button class="btn">รายละเอียด</button></div>
         </div>
         <div class="product-info">
@@ -191,7 +191,7 @@ function renderRecommended(){
 
 
 /**
- * เปิดหน้าต่าง Modal แสดงรายละเอียดสินค้า
+ * เปิดหน้าต่าง Modal แสดงรายละเอียดสินค้า (รองรับหลายรูป)
  * @param {number} id - Product ID
  */
 function openDetail(id){
@@ -200,13 +200,32 @@ function openDetail(id){
   const owner = DB.users.find(u => u.id === p.ownerId);
   const st = productStatus(p, state.filterStart, state.filterEnd);
 
+  const imgs = getImagesOf(p);
+  const hasMany = imgs.length > 1;
+
+  // ใช้ cover แบบสุ่ม (หรือ getDailyCoverImage(p) ถ้าอยากคงที่รายวัน)
+  const startIdx = Math.max(0, imgs.indexOf(getCoverImage(p)));
+  let idx = startIdx;   // << ประกาศครั้งเดียวพอ
+
   const root = document.createElement("div");
   root.className = "modal-backdrop show";
   root.innerHTML = `
-    <div class="modal" role="dialog" aria-modal="true">
-      <button class="modal-close" data-close="1">×</button>
+    <div class="modal" role="dialog" aria-modal="true" tabindex="-1">
+      <button class="modal-close" data-close="1" aria-label="ปิด">×</button>
+
       <div class="detail-wrap">
-        <img src="${imgPath(p.image)}" alt="${p.title}" class="detail-img">
+        <div class="detail-gallery">
+          <button class="c-nav c-prev" ${hasMany ? "" : "hidden"} aria-label="ภาพก่อนหน้า">‹</button>
+          <img src="${imgPath(imgs[idx])}" alt="${p.title}" class="detail-img" data-idx="${idx}">
+          <button class="c-nav c-next" ${hasMany ? "" : "hidden"} aria-label="ภาพถัดไป">›</button>
+
+          <div class="thumbs" ${hasMany ? "" : "hidden"}>
+            ${imgs.map((im,i)=>`
+              <img src="${imgPath(im)}" class="thumb ${i===idx?'active':''}" data-i="${i}" alt="ภาพย่อย ${i+1}">
+            `).join("")}
+          </div>
+        </div>
+
         <div class="detail-info">
           <h2 class="detail-title">${p.title}</h2>
           <div class="detail-meta">
@@ -229,7 +248,8 @@ function openDetail(id){
     </div>`;
 
   document.body.appendChild(root);
-  const closeModal = () => document.body.removeChild(root);
+
+  const closeModal = () => document.body.contains(root) && document.body.removeChild(root);
   root.addEventListener("click", (e) => {
     if (e.target.closest("[data-close]") || e.target === root) closeModal();
   });
@@ -237,4 +257,34 @@ function openDetail(id){
   root.querySelector('#detailAddBtn')?.addEventListener('click', () => {
     if (addToCart(p.id)) closeModal();
   });
+
+  // ---- gallery controls ----
+  const mainImg = root.querySelector('.detail-img');
+  const prevBtn = root.querySelector('.c-prev');
+  const nextBtn = root.querySelector('.c-next');
+  const thumbEls = [...root.querySelectorAll('.thumb')];
+
+  function go(n){
+    idx = (n + imgs.length) % imgs.length;
+    mainImg.src = imgPath(imgs[idx]);
+    mainImg.dataset.idx = String(idx);
+    thumbEls.forEach((t,i)=>t.classList.toggle('active', i===idx));
+  }
+
+  prevBtn?.addEventListener('click', e => { e.preventDefault(); go(idx-1); });
+  nextBtn?.addEventListener('click', e => { e.preventDefault(); go(idx+1); });
+  thumbEls.forEach(t => t.addEventListener('click', () => go(+t.dataset.i)));
+
+  root.addEventListener('keydown', (e)=>{
+    if (e.key === 'ArrowLeft') go(idx-1);
+    if (e.key === 'ArrowRight') go(idx+1);
+  });
+  root.querySelector('.modal')?.focus?.();
+
+  let startX = 0;
+  mainImg.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+  mainImg.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) go(idx + (dx < 0 ? 1 : -1));
+  }, {passive:true});
 }

@@ -2720,3 +2720,156 @@ html { scroll-padding-top: var(--header-h); }
   .hero .hero-left{ max-width: min(60vw, 48rem); }
 }
 
+
+
+.cookie-banner{
+  position: fixed; z-index: 9999; left: 16px; right:16px; bottom:16px;
+  background:#111; color:#fff; padding:14px; border-radius:14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25); display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+}
+.cookie-banner .cookie-text{ flex:1; font-size:14px; line-height:1.5; }
+.cookie-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.btn{ border:1px solid #444; background:#222; color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer; }
+.btn.primary{ background:#0d6efd; border-color:#0d6efd; }
+.btn.ghost{ background:transparent; }
+
+.cookie-modal{ position: fixed; inset:0; background: rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:10000; }
+.cookie-modal__box{
+  width:min(600px,90vw); background:#fff; color:#111; border-radius:14px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+.cookie-group{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 0; border-top:1px solid #eee; }
+.cookie-group:first-of-type{ border-top:none; }
+.cookie-modal__actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.cookie-links{ margin-top:8px; font-size:13px; color:#666; }
+
+/* toggle switch */
+.switch{ position:relative; display:inline-block; width:44px; height:24px; }
+.switch input{ display:none; }
+.switch span{
+  position:absolute; cursor:pointer; inset:0; background:#ddd; border-radius:100px; transition: .2s;
+}
+.switch span:before{
+  content:""; position:absolute; height:18px; width:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.switch input:checked + span{ background:#0d6efd; }
+.switch input:checked + span:before{ transform: translateX(20px); }
+
+/* ซ่อนเริ่มต้น */
+.cookie-banner{ display:none; }
+.cookie-modal{ display:none; }
+
+/* โชว์เมื่อมีคลาส .show */
+.cookie-banner.show{ display:flex; }
+.cookie-modal.show{ display:flex; }
+
+[hidden]{ display:none !important; }
+.cookie-banner{ display:none; } .cookie-banner.show{ display:flex; }
+.cookie-modal{  display:none; } .cookie-modal.show{  display:flex; }
+.cookie-banner, .cookie-modal{ z-index: 99999; }
+
+/* Cookie Consent – visibility control */
+[hidden]{ display:none !important; }
+
+.cookie-banner{ display:none; position:fixed; left:16px; right:16px; bottom:16px; 
+  background:#111; color:#fff; padding:14px; border-radius:14px; 
+  box-shadow:0 10px 30px rgba(0,0,0,.25); z-index:99999;
+  display:none; gap:12px; align-items:center; flex-wrap:wrap;
+}
+.cookie-banner.show{ display:flex; }
+
+.cookie-modal{ display:none; position:fixed; inset:0; 
+  background:rgba(0,0,0,.5); align-items:center; justify-content:center; 
+  z-index:100000;
+}
+.cookie-modal.show{ display:flex; }
+
+.cookie-modal__box{
+  width:min(600px,90vw); background:#fff; color:#111; border-radius:14px; 
+  padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+/* ปุ่มพื้นฐาน */
+.cookie-actions .btn{ border:1px solid #444; background:#222; color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer; }
+.cookie-actions .btn.primary{ background:#0d6efd; border-color:#0d6efd; }
+.cookie-actions .btn.ghost{ background:transparent; }
+
+:root{
+  --cc-bg: #ffffff;
+  --cc-fg: #111111;
+  --cc-muted: #6b7280;      /* gray-500 */
+  --cc-border: #e5e7eb;     /* gray-200 */
+  --cc-primary: #0d6efd;    /* blue */
+  --cc-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+/* Banner (พื้นหลังขาว ขอบชัด ตัวหนังสือเข้ม) */
+.cookie-banner{
+  background: var(--cc-bg);
+  color: var(--cc-fg);
+  border: 1px solid var(--cc-border);
+  box-shadow: var(--cc-shadow);
+}
+/* Modal */
+.cookie-modal{ background: rgba(17,24,39,.35); } /* overlay ทึบขึ้นเล็กน้อย */
+.cookie-modal__box{
+  background: var(--cc-bg);
+  color: var(--cc-fg);
+  border: 1px solid var(--cc-border);
+  box-shadow: var(--cc-shadow);
+}
+
+/* Buttons บนพื้นขาว */
+.cookie-actions .btn{
+  background: #f8fafc;              /* เทาอ่อน */
+  color: var(--cc-fg);
+  border: 1px solid var(--cc-border);
+}
+.cookie-actions .btn:hover{ filter: brightness(0.98); }
+.cookie-actions .btn.primary{
+  background: var(--cc-primary);
+  border-color: var(--cc-primary);
+  color:#fff;
+}
+.cookie-actions .btn.ghost{
+  background: transparent;
+  color: var(--cc-fg);
+  border-color: var(--cc-border);
+}
+
+/* ปุ่มใน modal (แถวล่าง) */
+.cookie-modal__actions .btn{
+  background: #f8fafc;
+  color: var(--cc-fg);
+  border: 1px solid var(--cc-border);
+}
+.cookie-modal__actions .btn.primary{
+  background: var(--cc-primary);
+  border-color: var(--cc-primary);
+  color:#fff;
+}
+
+/* --- Gallery in modal --- */
+.detail-gallery{ position:relative; display:grid; gap:10px; }
+.detail-img{
+  width:100%; max-height:60vh; object-fit:contain;
+  border-radius:12px; background:#f3f4f6;
+}
+
+.c-nav{
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:36px; height:36px; border-radius:999px; border:0;
+  background:rgba(0,0,0,.55); color:#fff; cursor:pointer;
+  display:grid; place-items:center; font-size:22px; line-height:1;
+}
+.c-prev{ left:8px; } .c-next{ right:8px; }
+.c-nav:hover{ background:rgba(0,0,0,.7); }
+
+.thumbs{ display:flex; gap:8px; overflow:auto; padding-top:2px; }
+.thumbs .thumb{
+  width:56px; height:56px; object-fit:cover; border-radius:8px;
+  border:2px solid transparent; cursor:pointer; flex:0 0 auto;
+}
+.thumbs .thumb.active{ border-color:#0d6efd; }
+
+
+

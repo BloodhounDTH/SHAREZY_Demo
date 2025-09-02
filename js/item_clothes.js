@@ -4,9 +4,9 @@
 window.ITEM_CLOTHES = window.ITEM_CLOTHES ?? [
     { id: 101, ownerId: 2, title: "ชุดราตรี", category:"เสื้อผ้า",
     pricePerDay: 180, deposit: 500, size:"M", color:"แดง", location:"กรุงเทพฯ",
-    image:"assets/pic101.jpg", shippingMode:"both", returnShipping:"separate",
-    shipFeeOut: 50, shipFeeBack: 50,
-    requiresWash:true, cleaningFee:30, active:false, rating:4.9
+    images: ["assets/pic101.jpg", "assets/pic102.jpg", "assets/pic103.jpg"], shippingMode:"both", returnShipping:"separate",
+    image: "assets/pic101.jpg",shipFeeOut: 50, shipFeeBack: 50,
+    requiresWash:true, cleaningFee:30, active:true, rating:4.9
   },
   { id: 102, ownerId: 2, title: "ชุดแต่งงาน", category:"เสื้อผ้า",
     pricePerDay: 220, deposit: 800, size:"L", color:"ดำ", location:"เชียงใหม่",

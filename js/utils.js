@@ -63,6 +63,20 @@ function showInfoModal(title, message) {
     document.body.appendChild(root);
 }
 
+function getImagesOf(p){
+  if (Array.isArray(p.images) && p.images.length) return p.images;
+  if (p.image) return [p.image];
+  return ["assets/placeholder.jpg"];
+}
+
+// เลือกรูป "ปก" แบบสุ่มครั้งเดียวต่อรอบการโหลดหน้า (แคชไว้ใน p._cover)
+function getCoverImage(p){
+  if (p._cover) return p._cover;
+  const imgs = getImagesOf(p);
+  const pick = imgs[(Math.random() * imgs.length) | 0];
+  p._cover = pick;                     // cache
+  return pick;
+}
 
 // === Rendering Helpers ===
 function getStarClass(rating){ if(rating >= 4.5) return "gold"; if(rating > 0) return "silver"; return "gray"; }
