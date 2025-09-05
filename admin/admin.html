@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SHAREZY Admin</title>
+  <link rel="icon" href="../assets/logo.png" />
+  <link rel="stylesheet" href="./style_admin.css" />
+  <!-- กราฟสำหรับ Dashboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <h1>SHAREZY Admin</h1>
+    <button id="btnBackHome">🏠 กลับหน้าแรก</button>
+  </header>
+
+  <!-- Sidebar (แบ่งหมวด + อีโมจิ) -->
+  <aside id="leftMenu" class="sidebar">
+    <div class="section-title">Overview</div>
+    <a href="#dashboard" data-page="dashboard">⚙️ Dashboard</a>
+
+    <div class="section-title">User Management</div>
+    <a href="#users" data-page="users">👥 User</a>
+    <a href="#renter" data-page="renter">🏬 Owner</a>
+
+    <div class="section-title">Products</div>
+    <a href="#product-search" data-page="product-search">🔎 Search Product</a>
+    <a href="#product-approve" data-page="product-approve">✅ Approve Product</a>
+    <a href="#product-rejected" data-page="product-rejected">⛔ Rejected Product</a>
+
+    <div class="section-title">Marketing</div>
+    <a href="#saller" data-page="saller">📊 Saller</a>
+    <a href="#merchant-register" data-page="merchant-register">📝 Merchant Register</a>
+    <a href="#cases" data-page="cases">⚖️ Dispute Cases</a>
+
+    <div class="section-title">Documents</div>
+    <a href="#documents" data-page="documents">📄 Agreement</a>
+  </aside>
+
+  <!-- Main -->
+  <main>
+    <!-- DASHBOARD -->
+    <section data-view="dashboard">
+    <h2>Dashboard</h2>
+
+    <!-- แถว 1: Visitors Online เดี่ยว -->
+    <div class="dash-row">
+      <div class="card visitors-banner">
+        <div class="v-label">Visitors Online</div>
+        <div class="v-value" id="visitorsOnline">0</div>
+        <div class="v-unit">ผู้ใช้งานขณะนี้ (real-time)</div>
+      </div>
+    </div>
+
+    <!-- แถว 2: 3 กล่องกึ่งกลาง -->
+    <div class="dash-row center-3">
+      <div class="card mid-kpi">
+        <h3>Weekly Sales</h3>
+        <p id="weeklySales">0 บาท</p>
+        <small id="weeklySalesDeltaText">—</small>
+      </div>
+      <div class="card mid-kpi">
+        <h3>Weekly Orders</h3>
+        <p id="weeklyOrders">0 รายการ</p>
+        <small id="weeklyOrdersDeltaText">—</small>
+      </div>
+      <div class="card mid-kpi">
+        <h3>Top Seller</h3>
+        <ol id="topSellers" class="topsellers"></ol>
+      </div>
+    </div>
+
+    <!-- แถว 3: ปุ่มช่วงเวลา -->
+    <div class="dash-row">
+      <div id="dashControls" class="range-bar">
+        <button class="btn" data-range="1h">1 ชั่วโมง</button>
+        <button class="btn" data-range="3h">3 ชั่วโมง</button>
+        <button class="btn" data-range="6h">6 ชั่วโมง</button>
+        <button class="btn" data-range="12h">12 ชั่วโมง</button>
+        <button class="btn" data-range="1d">1 วัน</button>
+        <button class="btn" data-range="3d">3 วัน</button>
+        <button class="btn" data-range="7d">7 วัน</button>
+        <button class="btn" data-range="30d">30 วัน</button>
+        <button class="btn" data-range="90d">3 เดือน</button>
+        <button class="btn" data-range="180d">6 เดือน</button>
+        <button class="btn" data-range="1y">1 ปี</button>
+        <button class="btn" data-range="2y">2 ปี</button>
+        <button class="btn" data-range="3y">3 ปี</button>
+        <label class="compare">
+          <input type="checkbox" id="dashCompare"> เปรียบเทียบกับช่วงก่อนหน้า
+        </label>
+      </div>
+    </div>
+
+    <!-- แถว 4: กราฟ 80 / Top Categories 20 -->
+    <div class="dash-row graph-row">
+      <div class="card graph-cell">
+        <h3>Visit & Sales Statistics</h3>
+        <div class="chart-wrap"><canvas id="visitChart"></canvas></div>
+      </div>
+      <div class="card side-cell">
+        <h3>🔥 Top Categories (ช่วงที่เลือก)</h3>
+        <div class="chart-wrap sm"><canvas id="catChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- แถว 5: แผนที่ 70 / Insights 30 -->
+    <div class="dash-row map-row">
+      <div class="card map-cell">
+        <h3>🗺️ ผู้ใช้ตามจังหวัด (ช่วงที่เลือก)</h3>
+        <div id="thMapHost" class="th-map"></div>
+      </div>
+      <div class="card insights-cell">
+        <h3>📈 Executive Insights</h3>
+        <ul id="execInsights" class="insights-list"></ul>
+      </div>
+    </div>
+  </section>
+
+
+
+    <!-- SALLER -->
+    <section data-view="saller" hidden>
+      <h2>📊 Saller</h2>
+
+      <!-- ฟิลเตอร์ -->
+      <div class="saller-filters" style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px">
+        <div style="flex:1;min-width:200px">
+          <label>ค้นหา</label><br/>
+          <input type="text" id="sl_search" placeholder="เลขออเดอร์/สินค้า/ร้านค้า">
+          <button id="sl_apply" class="btn">นำไปใช้</button>
+          <button id="sl_reset" class="btn">ล้าง</button>
+          <button id="sl_export" class="btn">Export CSV</button>
+        </div>
+      </div>
+
+
+      <!-- ตาราง -->
+      <table id="tblSaller" class="table">
+        <thead>
+          <tr>
+            <th data-sort="createdAt">วันที่</th>
+            <th data-sort="id">เลขออเดอร์</th>
+            <th data-sort="owner">ร้านค้า</th>
+            <th data-sort="title">สินค้า</th>
+            <th data-sort="qty" style="text-align:right">จำนวน</th>
+            <th data-sort="total" style="text-align:right">ยอดรวม</th>
+            <th data-sort="status">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <!-- Modal รายละเอียดออเดอร์ ใช้ที่เดียวกับของระบบ -->
+      <div class="mask" style="display:none"></div>
+      <div id="productModal" style="display:none"></div>
+    </section>
+
+
+    <!-- USERS -->
+    <section data-view="users" hidden>
+      <h2>👥 Users</h2>
+      <input type="text" id="userSearch" placeholder="ค้นหาผู้ใช้..."/>
+      <select id="userRole">
+        <option value="">ทั้งหมด</option>
+        <option value="renter">ลูกค้า</option>
+        <option value="owner">ร้านค้า</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button id="btnReloadUsers">Reload</button>
+      <table id="tblUsers">
+        <thead>
+          <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Level</th><th>Phone</th><th>Action</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- RENTER -->
+    <section data-view="renter" hidden>
+      <h2>🏬 Renter</h2>
+
+      <!-- Filter bar -->
+      <div class="renter-filters" style="display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin-bottom:10px">
+        <div style="flex:1;min-width:220px">
+          <input type="text" id="r_search" placeholder="ชื่อร้าน / ชื่อสินค้า / เลขสินค้า">
+          <button id="r_apply" class="btn">นำไปใช้</button>
+          <button id="r_reset" class="btn">ล้าง</button>
+        </div>
+      </div>
+
+      <!-- Owner list -->
+      <div id="ownerList" class="card-grid"></div>
+
+      <!-- Owner detail modal -->
+      <div class="mask" id="r_mask" style="display:none"></div>
+      <div id="ownerModal" style="display:none"></div>
+
+      <!-- Product edit modal (reuse) -->
+      <div id="productModal" style="display:none"></div>
+    </section>
+
+
+    <!-- MERCHANT REGISTER -->
+    <section data-view="merchant-register" hidden>
+      <h2>📝 Merchant Register</h2>
+      <div id="merchantCards" class="cards-grid"><!-- JS เติม 15 ร้าน --></div>
+    </section>
+
+    <!-- PRODUCTS: APPROVE -->
+    <section data-view="product-approve" hidden>
+      <h2>✅ Approve Product</h2>
+      <input type="text" id="productSearch" placeholder="ค้นหาสินค้า..."/>
+      <button id="btnProductRefresh">Refresh</button>
+
+      <table id="tblProducts">
+        <thead><tr><th>Details</th><th>Category</th><th>Price/Day</th><th>Status</th><th>Owner</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- PRODUCTS: SEARCH -->
+    <section data-view="product-search" hidden>
+      <h2>🔎 Search Product</h2>
+      <input type="text" id="productSearchAll" placeholder="ค้นหาสินค้า..."/>
+      <table id="tblProductsAll">
+        <thead><tr><th>ID</th><th>Picture</Picture></th><th>Details</Details></th><th>Category</th><th>Price/Day</th><th>Owner</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- PRODUCTS: REJECTED -->
+    <section data-view="product-rejected" hidden>
+      <h2>⛔ Rejected Product</h2>
+      <table id="tblProductsRejected">
+        <thead><tr><th>Date</th><th>Owner</th><th>Product</th><th>Details</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- CASES -->
+    <section data-view="cases" hidden>
+      <h2>⚖️ Dispute Cases</h2>
+      <table id="tblCases">
+        <thead><tr><th>#</th><th>Order ID</th><th>Case</th><th>Status</th><th>Created</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- DOCUMENTS -->
+    <section data-view="documents" hidden>
+      <h2>📄 Document</h2>
+      <input type="text" id="docSearch" placeholder="ค้นหา Order Number..."/>
+      <table id="tblDocs" class="table">
+        <thead>
+          <tr>
+            <th>Order No</th>
+            <th>User (Owner)</th>
+            <th>Renter</th>
+            <th>Created</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <div class="mask"></div>
+
+  <div id="productModal">
+    <h3>แก้ไขสินค้า</h3>
+    <input id="pm_id" type="hidden" />
+    <label>ชื่อสินค้า</label>
+    <input id="pm_title" type="text" />
+    <label>ราคา/วัน</label>
+    <input id="pm_price" type="number" />
+    <label>สถานะ</label>
+    <select id="pm_status">
+      <option value="pending">Pending</option>
+      <option value="approved">Approved</option>
+      <option value="rejected">Rejected</option>
+    </select>
+    <label>Owner ID</label>
+    <input id="pm_ownerId" type="text" />
+    <button id="pm_save">💾 บันทึก</button>
+    <button id="pm_cancel">❌ ยกเลิก</button>
+  </div>
+
+  <div id="caseModal"></div>
+  <div id="tip"></div>
+
+  <!-- Load data (ฐานจริงจาก www/js) -->
+  <script src="../js/user.js"></script>
+  <script src="../js/item_clothes.js"></script>
+  <script src="../js/item_tools.js"></script>
+  <script src="../js/order-management.js"></script>
+  <script src="../js/signature.js"></script>
+
+  <!-- Main App (router + modules) -->
+  <script type="module" src="./js/app.js"></script>
+  <!-- amCharts v3 (Thailand map) -->
+  <script src="https://www.amcharts.com/lib/3/ammap.js"></script>
+  <script src="https://www.amcharts.com/lib/3/maps/js/thailandLow.js"></script>
+  <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+</body>
+</html>

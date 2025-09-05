@@ -200,7 +200,7 @@ window.RANK_ICONS = window.RANK_ICONS || {
 };
 
 function getUserRank(user){
-  if (!user) return { name:'Guest', icon:'🙂' };
+  if (!user) return { name:'Guest', icon:'🐣' };
   // 1) ถ้าเป็น admin หรือมี level ที่กำหนดมาแล้ว → ใช้เลย
   const explicit = (user.role === 'admin') ? 'Admin' : (user.level || '');
   if (explicit){

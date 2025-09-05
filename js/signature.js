@@ -9,6 +9,51 @@
  * @param {object} currentUser - อ็อบเจกต์ผู้ใช้ปัจจุบันจาก state.user
  */
 
+// helper: parseDateInput
+function parseDateInput(val) {
+  if (!val) return new Date();
+  if (val instanceof Date) return val;
+
+  // ถ้าเป็น string แบบ ISO หรือ YYYY-MM-DD
+  if (typeof val === 'string') {
+    const iso = Date.parse(val);
+    if (!isNaN(iso)) return new Date(iso);
+    // fallback: split
+    const m = val.match(/(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  }
+
+  // กรณีอื่น ๆ คืนวันนี้
+  return new Date();
+}
+
+function canSeeNatId(viewer, targetUser) {
+  // viewer = user ปัจจุบัน, targetUser = user ที่จะโชว์ข้อมูล
+  if (!viewer) return false;
+  if (viewer.role === 'admin') return true;
+  // อื่น ๆ ถ้าอยากจำกัดสิทธิ์ก็ปรับตรงนี้ได้
+  return false;
+}
+
+// helper: addDays
+function addDays(date, days) {
+  const d = (date instanceof Date) ? new Date(date) : parseDateInput(date);
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+// ===== helpers for product list / fallback =====
+function getAllProducts() {
+  const clothes = Array.isArray(window.ITEM_CLOTHES) ? window.ITEM_CLOTHES : [];
+  const tools   = Array.isArray(window.ITEM_TOOLS)   ? window.ITEM_TOOLS   : [];
+  return [...clothes, ...tools];
+}
+
+// บางโปรเจกต์อาจมี window.products อยู่แล้ว; ถ้าไม่มีให้ใช้จาก ITEM_* แทน
+const __ALL_PRODUCTS__ = getAllProducts();
+const products = Array.isArray(window.products) ? window.products : __ALL_PRODUCTS__;
+
+
 function maskNationalId(id) {
   if (!id) return 'N/A';
   // คงรูปแบบเดิมไว้บางส่วน เช่น X-XXXX-XXXXX-XX-X
@@ -41,20 +86,47 @@ function showSignaturePage(order, currentUser) {
   const rentalEndDate = parseDateInput(order.rentalEnd);
   const returnDate = rentalEndDate ? addDays(rentalEndDate, 1) : null;
 
-  const itemsHtml = order.items.map(id => {
-    const p = products.find(x => x.id === id) || {};
+  const itemsHtml = (order.items || []).map(it => {
+    let p = {};
+    let qty = 1;
+
+    // กรณีที่ order.items เป็น object: { productId, title, qty, category, color, size, ... }
+    if (typeof it === 'object' && it !== null) {
+      qty = it.qty || 1;
+
+      if (it.productId != null) {
+        p = products.find(x => String(x.id) === String(it.productId)) || {};
+      }
+
+      // ถ้าหาไม่เจอในคลัง ให้ใช้ข้อมูลที่มากับออเดอร์เป็น fallback
+      if (!p || !p.title) {
+        p = {
+          id: it.productId,
+          title: it.title || 'Unknown Item',
+          category: it.category,
+          color: it.color,
+          size: it.size
+        };
+      }
+    } else {
+      // กรณีที่ order.items เป็น id ล้วน
+      p = products.find(x => String(x.id) === String(it)) || {};
+    }
+
     const details = [
       p.category && `<li><strong>หมวดหมู่:</strong> ${p.category}</li>`,
       p.color && `<li><strong>สี:</strong> ${p.color}</li>`,
       p.size && `<li><strong>ขนาด:</strong> ${p.size}</li>`
     ].filter(Boolean).join('');
+
     return `
       <div class="contract-item">
-        <p><strong>- ${p.title || 'Unknown Item'}</strong> (จำนวน: 1)</p>
+        <p><strong>- ${p.title || 'Unknown Item'}</strong> (จำนวน: ${qty})</p>
         ${details ? `<ul class="item-details">${details}</ul>` : ''}
       </div>
     `;
   }).join('');
+
 
   const isRenter = currentUser.id === order.renterId;
   const isOwner  = currentUser.id === order.ownerId;
@@ -255,3 +327,4 @@ function handlePostSignature(newStatus, order) {
     }
   }
 }
+

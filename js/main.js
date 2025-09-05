@@ -278,6 +278,13 @@ function mountEvents(){
   }
 }
 
+function openAdmin(){
+  // ถ้าไม่ได้ล็อกอินหรือไม่ใช่ admin ป้องกันไว้ชั้นหนึ่ง
+  const u = JSON.parse(localStorage.getItem('s_user')||'null');
+  if(!u || u.role!=='admin'){ alert('สำหรับผู้ดูแลระบบเท่านั้น'); return; }
+  // ไปหน้าแดชบอร์ด
+  window.location.href = 'admin/admin.html';
+}
 
 // --- App Initialization ---
 function init(){

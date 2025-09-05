@@ -1,0 +1,784 @@
+/* ========== ROOT VARIABLES ========== */
+:root {
+  --brand: #6c5ce7;
+  --brand-dark: #4834d4;
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #636e72;
+  --sidebar-active-bg: #f5f6ff;
+  --sidebar-active-border: #6c5ce7;
+  --header-bg: #ffffff;
+  --header-border: #eaeaea;
+  --body-bg: #f8f9fb;
+  --text-main: #2d3436;
+  --text-muted: #a4b0be;
+  --card-bg: #ffffff;
+  --table-border: #f1f2f6;
+  --table-head-bg: #f9fafc;
+  --badge-green: #27ae60;
+  --badge-yellow: #e1b12c;
+  --badge-red: #e74c3c;
+  --badge-blue: #0984e3;
+}
+
+/* ========== RESET ========== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: var(--body-bg);
+  color: var(--text-main);
+  display: flex;
+}
+
+/* ========== HEADER ========== */
+header {
+  position: fixed;
+  top: 0; left: 220px; right: 0;
+  height: 56px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+}
+header h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+header button {
+  background: var(--brand);
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+header button:hover {
+  background: var(--brand-dark);
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 220px;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--header-border);
+  display: flex;
+  flex-direction: column;
+  padding-top: 56px;
+}
+.sidebar .section-title {
+  padding: 12px 16px 4px;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.sidebar a {
+  padding: 12px 16px;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+.sidebar a:hover {
+  background: #f1f2f6;
+  color: var(--text-main);
+}
+.sidebar a.active {
+  background: var(--sidebar-active-bg);
+  border-left: 4px solid var(--sidebar-active-border);
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+/* ========== MAIN CONTENT ========== */
+main {
+  margin-left: 220px;
+  padding: 72px 20px 20px 20px;
+  flex: 1;
+}
+section {
+  margin-bottom: 40px;
+}
+section h2 {
+  margin-bottom: 16px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+/* ========== CARDS & KPI ========== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+.card h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+.card p, .card ol, .card ul {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Chart block */
+.chart-block {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* ========== TABLES ========== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-top: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+th, td {
+  padding: 10px;
+  border: 1px solid var(--table-border);
+  text-align: left;
+  font-size: 14px;
+}
+th {
+  background: var(--table-head-bg);
+  font-weight: 600;
+  color: var(--text-main);
+}
+tr:nth-child(even) { background: #fcfcfd; }
+
+/* ========== BUTTONS ========== */
+button, .btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--brand);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+button:hover, .btn:hover {
+  background: var(--brand-dark);
+}
+
+/* ========== INPUTS ========== */
+input, select {
+  padding: 6px 8px;
+  margin: 4px 0;
+  border: 1px solid #dfe6e9;
+  border-radius: 6px;
+  font-size: 14px;
+  background: #fff;
+}
+
+/* ========== STATUS BADGES ========== */
+.status {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+}
+.st-open    { background: #eafbea;  color: var(--badge-green); }
+.st-pending { background: #fff8e1; color: var(--badge-yellow); }
+.st-rejected{ background: #ffeaea; color: var(--badge-red); }
+.st-done    { background: #eaf7ff;  color: var(--badge-blue); }
+
+/* ========== MASK & MODALS ========== */
+.mask {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 999;
+}
+#productModal, #caseModal {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 420px; max-width: 95%;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  display: none;
+}
+#productModal h3, #caseModal h3 {
+  margin-bottom: 12px;
+}
+#productModal input, #caseModal input,
+#productModal select, #caseModal select {
+  width: 100%; margin-bottom: 10px;
+  padding: 6px 8px;
+  border: 1px solid #dcdde1;
+  border-radius: 6px;
+}
+
+/* ========== TOOLTIP ========== */
+#tip {
+  position: absolute;
+  background: #2f3542;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: none;
+  z-index: 2000;
+}
+
+/* --- Chart height control --- */
+.chart-block {
+  background: var(--card-bg);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+
+  /* ความสูงกราฟที่แนะนำ */
+  height: 260px;            /* ปรับได้ 220–320 ตามชอบ */
+  display: flex;
+  flex-direction: column;
+}
+.chart-block canvas {
+  /* ให้แคนวาสกินพื้นที่ที่เหลือ ไม่เกิน container */
+  flex: 1 1 auto;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ===== Admin Patches (modal & cards) ===== */
+body.no-scroll { overflow: hidden; }
+#productModal.modal-lg { width: 900px; max-width: 95%; }
+
+.owner-box { display:flex; gap:12px; margin:8px 0 16px; }
+.owner-avatar { font-size:32px; width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:#f5f6ff; border-radius:50%; }
+.owner-meta div { font-size: 14px; color:#555; }
+
+.card-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:12px; }
+.p-card { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,.06); display:flex; flex-direction:column; }
+.p-card .thumb { width:100%; height:140px; background-size:cover; background-position:center; }
+.p-card .p-body { padding:10px; display:flex; flex-direction:column; gap:6px; }
+.p-card .p-title { font-weight:600; }
+.p-card .p-meta  { font-size:13px; color:#666; }
+.p-card .p-status{ margin-top:4px; }
+.p-card .p-actions{ margin-top:auto; display:flex; justify-content:flex-end; }
+
+/* ลิงก์ที่คลิกได้ในตารางชื่อสินค้า */
+.linklike { color:#4834d4; cursor:pointer; text-decoration:underline; }
+.linklike:hover { color:#6c5ce7; }
+
+/* ---- Modal sizes & scroll ---- */
+#productModal.modal-lg { width: 820px; max-width: 95%; max-height: 86vh; overflow: auto; }
+#productModal.modal-md { width: 520px; max-width: 90%; max-height: 86vh; overflow: auto; }
+
+/* ====== GLOBAL PATCH ====== */
+body.no-scroll { overflow: hidden; }
+
+/* ---- Modal sizes & scroll ---- */
+#productModal.modal-lg { 
+  width: 880px; 
+  max-width: 95%; 
+  max-height: 86vh; 
+  overflow: auto; 
+}
+#productModal.modal-md { 
+  width: 520px; 
+  max-width: 90%; 
+  max-height: 86vh; 
+  overflow: auto; 
+}
+
+/* ---- Owner detail / User detail ---- */
+.owner-box { 
+  display:flex; 
+  gap:12px; 
+  margin:8px 0 16px; 
+  align-items:flex-start;
+}
+.owner-avatar { 
+  font-size:32px; 
+  width:48px; 
+  height:48px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  background:#f5f6ff; 
+  border-radius:50%; 
+}
+.owner-meta div { font-size: 14px; color:#555; }
+
+/* ---- Card grid (สินค้า, ร้านค้า) ---- */
+.card-grid { 
+  display:grid; 
+  grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); 
+  gap:12px; 
+}
+.p-card { 
+  background:#fff; 
+  border-radius:10px; 
+  overflow:hidden; 
+  box-shadow:0 2px 6px rgba(0,0,0,.06); 
+  display:flex; 
+  flex-direction:column; 
+}
+.p-card .thumb { 
+  width:100%; 
+  height:140px; 
+  background-size:cover; 
+  background-position:center; 
+}
+.p-card .p-body { 
+  padding:10px; 
+  display:flex; 
+  flex-direction:column; 
+  gap:6px; 
+}
+.p-card .p-title { font-weight:600; }
+.p-card .p-meta  { font-size:13px; color:#666; }
+.p-card .p-status{ margin-top:4px; }
+.p-card .p-actions{ margin-top:auto; display:flex; justify-content:flex-end; }
+
+/* ---- Link style for clickable text ---- */
+.linklike { color:#4834d4; cursor:pointer; text-decoration:underline; }
+.linklike:hover { color:#6c5ce7; }
+
+/* ---- Saller KPI cards ---- */
+#tblSaller th[data-sort] { cursor:pointer; }
+#tblSaller th[data-sort]:after { content:" ⇅"; font-size:11px; color:#aaa; }
+
+/* ---- Dashboard controls ---- */
+#dashControls button.btn { padding:4px 10px; font-size:13px; }
+#dashControls label { font-size:13px; color:#555; }
+
+/* ---- Chart containers ---- */
+.chart-block { height:auto; }
+.chart-block > div { height:260px; }
+.chart-block canvas { width:100% !important; height:100% !important; }
+
+/* ---- Category chart (แนวนอน) ---- */
+#catChart { width:100%; height:100% !important; }
+
+/* ---- Exec Insights list ---- */
+#execInsights li { margin-bottom:6px; font-size:14px; }
+
+/* ---- Tile-map Thailand ---- */
+#thMapHost { 
+  display:block; 
+  padding:8px 0; 
+}
+#thMapHost div { font-size:13px; }
+
+/* ==== DASHBOARD LAYOUT NEW ==== */
+.dash-row { display:block; margin-bottom:14px; }
+.center-3 { display:grid; grid-template-columns: repeat(3, minmax(0, 320px)); justify-content:center; gap:12px; }
+.graph-row  { display:grid; grid-template-columns: 4fr 1fr; gap:12px; }
+.map-row    { display:grid; grid-template-columns: 7fr 3fr; gap:12px; }
+
+.visitors-banner { display:flex; align-items:center; gap:18px; padding:18px; }
+.visitors-banner .v-label { font-weight:600; color:#6c5ce7; }
+.visitors-banner .v-value { font-size:38px; font-weight:800; letter-spacing:1px; }
+.visitors-banner .v-unit  { color:#666; }
+
+.v-blink { animation: vPulse 0.8s ease; }
+@keyframes vPulse { 0%{color:#2ecc71} 50%{color:#27ae60} 100%{color:inherit} }
+
+.mid-kpi p { font-size:24px; font-weight:700; margin:6px 0 0; }
+.mid-kpi small { color:#777; }
+
+.range-bar { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.range-bar .compare { margin-left:auto; font-size:13px; color:#555; }
+.range-bar .btn { padding:4px 10px; }
+
+.chart-wrap { height:280px; }
+.chart-wrap.sm { height:220px; }
+.chart-wrap canvas { width:100% !important; height:100% !important; }
+
+.th-map { width:100%; height:360px; }
+.insights-list li { margin:6px 0; }
+
+/* Top sellers medals */
+.topsellers { margin:0; padding-left:18px; line-height:1.7; }
+.topsellers .gold::marker   { content:"🥇 "; }
+.topsellers .silver::marker { content:"🥈 "; }
+.topsellers .bronze::marker { content:"🥉 "; }
+
+/* ==== Signature Modal ==== */
+#signature-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.order-detail-modal.signature-modal-size {
+  width: min(980px, 96vw);
+  max-height: 90vh;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
+  overflow: auto;
+  padding: 18px 18px 16px;
+  position: relative;
+}
+
+.order-detail-modal .modal-close {
+  position: absolute;
+  top: 8px; right: 10px;
+  border: 0; background: transparent;
+  font-size: 22px; cursor: pointer;
+}
+
+.contract-printable-container .my-info-header { margin-bottom: 8px; }
+.contract-printable-container .my-info-body   { font-size: 14px; color: #333; }
+.contract-printable-container .my-info-body h3{ margin: 14px 0 6px; }
+.contract-printable-container .my-info-footer { display: flex; justify-content: flex-end; gap: 8px; }
+
+@media print {
+  body * { visibility: hidden; }
+  #signature-modal-overlay, #signature-modal-overlay * { visibility: visible; }
+  #signature-modal-overlay { position: static; padding: 0; background: #fff; }
+  .order-detail-modal.signature-modal-size {
+    width: auto; max-height: none; box-shadow: none; border-radius: 0; overflow: visible;
+  }
+  .modal-close, #print-contract-btn { display: none !important; }
+}
+
+
+/* style_admin.css — Light Theme */
+
+:root {
+  --bg: #f7f9fc;
+  --text: #222;
+  --muted: #666;
+  --border: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+
+  --brand: #3498db;
+  --good: #2ecc71;
+  --warn: #f1c40f;
+  --bad:  #e74c3c;
+}
+
+body {
+  margin:0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 system-ui, Segoe UI, Roboto, Helvetica, Arial;
+}
+
+main { padding:16px; background:#fff; border-radius:12px; box-shadow:var(--shadow); }
+
+h1,h2,h3 { margin:0 0 10px; }
+h2 { font-size:20px; }
+h3 { font-size:18px; }
+.muted { color: var(--muted); }
+
+/* Sidebar Active */
+a[data-page].is-active {
+  background: var(--brand);
+  color: #fff !important;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+/* Buttons */
+.btn {
+  background: var(--brand);
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  box-shadow:var(--shadow);
+}
+.btn:hover { filter:brightness(1.1); }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+button {
+  background:#eee;
+  border:1px solid var(--border);
+  padding:7px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+button:hover { background:#ddd; }
+
+/* Forms */
+input,select,textarea {
+  width:100%;
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--border);
+  padding:8px 10px;
+  border-radius:6px;
+}
+label { display:block; margin-bottom:4px; color:var(--muted); }
+
+/* Table */
+table { width:100%; border-collapse: collapse; margin:10px 0; }
+thead th {
+  background:#f0f0f0;
+  text-align:left;
+  padding:10px;
+  font-weight:600;
+}
+tbody td {
+  border-top:1px solid var(--border);
+  padding:10px;
+}
+tr:nth-child(even) td { background:#fafafa; }
+
+/* Cards */
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+.p-card {
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  display:flex;
+}
+.p-card .thumb {
+  width:90px;
+  height:90px;
+  background:#eee;
+  background-size:cover;
+  background-position:center;
+}
+.p-card .p-body {
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.p-title { font-weight:600; }
+.p-meta { font-size:12px; color:var(--muted); }
+.linklike { color:var(--brand); cursor:pointer; }
+.linklike:hover { text-decoration:underline; }
+
+/* Badges */
+.badge,.status {
+  display:inline-block;
+  padding:3px 8px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:600;
+}
+.st-open { background:#e0f8ea; color:var(--good); }
+.st-pending { background:#fff9e0; color:var(--warn); }
+.st-done { background:#e0f8ea; color:var(--good); }
+.st-rejected { background:#fde0e0; color:var(--bad); }
+
+/* Modal */
+.mask {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,0.4);
+  display:none; z-index:80;
+}
+#ownerModal,#productModal,#caseModal {
+  position:fixed;
+  left:50%; top:50%;
+  transform:translate(-50%,-50%);
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.2);
+  padding:16px;
+  display:none;
+  z-index:90;
+  max-height:80vh;
+  overflow:auto;
+  width:90%;
+  max-width:800px;
+}
+.no-scroll { overflow:hidden; }
+
+/* Owner header box */
+.owner-box {
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#fafafa;
+  padding:10px 12px;
+  margin-bottom:10px;
+}
+.owner-avatar {
+  width:44px; height:44px;
+  border-radius:50%;
+  background:#eee;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.owner-meta { display:flex; flex-direction:column; gap:4px; }
+
+/* ===== PATCHES (focus 5 & 7 + modal reliability + table spacing) ===== */
+
+/* 5) Merchant Register ถูกบีบ: ให้เต็มกว้าง + ตารางอ่านง่าย */
+section[data-view="merchant-register"] { width: 100%; }
+section[data-view="merchant-register"] table { table-layout: auto; width: 100%; }
+section[data-view="merchant-register"] table td, 
+section[data-view="merchant-register"] table th { white-space: nowrap; }
+
+/* Modal reliability (ใช้ mask เดียวทุกเมนู) */
+.mask{ position:fixed; inset:0; background:rgba(0,0,0,0.45); display:none; z-index: 998; }
+#ownerModal,#productModal,#caseModal{
+  position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  background:#fff; border:1px solid #ddd; border-radius:12px; padding:14px;
+  max-height: 82vh; overflow:auto; display:none; width: 92%; max-width: 960px; z-index: 999;
+}
+.no-scroll{ overflow: hidden; }
+
+/* ตาราง spacing ให้โปร่ง */
+table { border-collapse: collapse; width:100%; }
+thead th{ background:#f2f2f2; }
+tbody tr:nth-child(even) td{ background:#fafafa; }
+
+/* 6) รูปที่เผลอชี้ admin/assets — ปล่อยให้ JS แก้ path, CSS ไม่ต้องเพิ่ม */
+
+/* 7) ซ่อนเครดิต amCharts (สำหรับ demo เท่านั้น — โปรดตรวจสอบเงื่อนไข License ก่อนใช้จริง) */
+.amcharts-chart-div a { display: none !important; }
+
+/* style_admin.css — Light */
+
+:root{
+  --bg:#f7f9fc; --text:#222; --muted:#666; --border:#ddd; --shadow:0 2px 10px rgba(0,0,0,.08);
+  --brand:#3498db; --good:#2ecc71; --warn:#f1c40f; --bad:#e74c3c;
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.6 system-ui,Segoe UI,Roboto,Helvetica,Arial}
+main{padding:16px;background:#fff;border-radius:12px;box-shadow:var(--shadow)}
+h1,h2,h3{margin:0 0 10px} h2{font-size:20px} h3{font-size:18px}
+.muted{color:var(--muted)}
+
+a[data-page].is-active{background:var(--brand);color:#fff !important;border-radius:8px;padding:6px 10px}
+
+/* Buttons */
+.btn{background:var(--brand);color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;box-shadow:var(--shadow)}
+.btn:hover{filter:brightness(1.1)}
+button{background:#eee;border:1px solid var(--border);padding:7px 12px;border-radius:6px;cursor:pointer}
+button:hover{background:#ddd}
+
+/* Forms */
+input,select,textarea{width:100%;background:#fff;color:var(--text);border:1px solid var(--border);padding:8px 10px;border-radius:6px}
+label{display:block;margin-bottom:4px;color:var(--muted)}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:10px 0}
+thead th{background:#f0f0f0;text-align:left;padding:10px;font-weight:600}
+tbody td{border-top:1px solid var(--border);padding:10px}
+tr:nth-child(even) td{background:#fafafa}
+th[data-sort]{cursor:pointer} th[data-sort]:after{content:' ⇅';opacity:.35;font-weight:400}
+.tbl-thumb{width:54px;height:38px;background:#eee;background-size:cover;background-position:center;border-radius:6px}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.p-card{background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;display:flex}
+.p-card .thumb{width:90px;height:90px;background:#eee;background-size:cover;background-position:center}
+.p-card .p-body{padding:10px;display:flex;flex-direction:column;gap:6px}
+.p-title{font-weight:600}.p-meta{font-size:12px;color:var(--muted)}.p-actions{margin-top:auto;display:flex;gap:8px}
+.linklike{color:var(--brand);cursor:pointer}.linklike:hover{text-decoration:underline}
+
+/* Badges */
+.badge,.status{display:inline-block;padding:3px 8px;border-radius:12px;font-size:12px;font-weight:600}
+.st-open{background:#e8f8ee;color:#1e8a46}
+.st-pending{background:#fff9e0;color:#8a6d0a}
+.st-done{background:#e8f8ee;color:#1e8a46}
+.st-rejected{background:#fde0e0;color:#a12222}
+
+/* Modal (mask + modal กลางเดียว) */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:998}
+#adminModal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.2);padding:16px;display:none;z-index:999;max-height:82vh;overflow:auto;width:92%;max-width:960px}
+.modal-md{max-width:640px !important}.modal-lg{max-width:960px !important}
+.no-scroll{overflow:hidden}
+
+/* Owner header */
+.owner-box{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--border);border-radius:10px;background:#fafafa;padding:10px 12px;margin-bottom:10px}
+.owner-avatar{width:44px;height:44px;border-radius:50%;background:#eee;display:flex;align-items:center;justify-content:center;font-size:20px}
+.owner-meta{display:flex;flex-direction:column;gap:4px}
+
+/* Merchant Register ให้เต็มความกว้าง */
+section[data-view="merchant-register"]{width:100%}
+section[data-view="merchant-register"] table{table-layout:auto;width:100%}
+section[data-view="merchant-register"] th,section[data-view="merchant-register"] td{white-space:nowrap}
+
+/* ซ่อนเครดิต amCharts (เดโมภายในเท่านั้น) */
+.amcharts-chart-div a{display:none !important}
+
+/* FORCE center for Owner card text/button */
+.p-body .p-title,
+.p-body .p-meta,
+.p-actions { text-align:center; justify-content:center; }
+.p-actions .btn { display:inline-block; margin:0 auto; }
+
+
+/* ==== Tweaks per request ==== */
+
+/* Inputs sizing */
+.input-xs{ padding:6px 8px; height:30px; font-size:13px; }
+.input-sm{ padding:6px 10px; height:34px; font-size:14px; }
+.input-md{ padding:8px 12px; height:38px; font-size:15px; }
+.input-lg{ padding:10px 14px; height:42px; font-size:16px; }
+
+/* Users toolbar: compact */
+section[data-view="users"] #userSearch{ max-width:240px; }
+section[data-view="users"] #userRole{ max-width:140px; margin-left:6px; }
+section[data-view="users"] #btnReloadUsers{ margin-left:6px; }
+
+/* Owner (renter) search shorter */
+section[data-view="renter"] #r_search{ max-width:260px; }
+
+/* Product Approve: shorter search, hide first category select */
+section[data-view="product-approve"] #productSearch{ max-width:240px; }
+section[data-view="product-approve"] #productCat{ display:none; }
+
+/* Ensure images are centered & readable in cards/modals */
+.p-card .thumb{ background-position:center center !important; }
+.owner-avatar img{ width:100%; height:100%; object-fit:cover; object-position:center; border-radius:50%; display:block; }
+#adminModal{ background:#fff; }
+
+/* KPI styles for saller */
+.saller-kpis .kpi{ background:#fff; border:1px solid #eee; border-radius:10px; padding:10px 12px; }
+.saller-kpis .kpi-title{ font-size:12px; color:#666; }
+.saller-kpis .kpi-value{ font-size:20px; font-weight:700; margin-top:4px; }
+
+section[data-view="saller"] #sl_search{ max-width:260px; }
+
+.p-card .thumb {
+  width: 200px;              /* หรือกำหนดตามที่ต้องการ */
+  height: 200px;             /* ให้เป็นสี่เหลี่ยมจัตุรัส */
+  background-position: center center !important;
+  background-repeat: no-repeat;
+  background-size: cover;    /* ใช้ cover หรือ contain */
+  margin: 0 auto;            /* จัดให้ div thumb อยู่กึ่งกลางแนวนอน */
+  border-radius: 10px;       /* (ถ้าอยากให้โค้งมน) */
+}
